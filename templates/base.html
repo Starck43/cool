@@ -1,0 +1,148 @@
+{% load static %}
+{% load custom_tags %}
+{% load i18n %}
+{% load thumbnail %}
+
+<!DOCTYPE html>
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" xmlns:og="http://ogp.me/ns#" class="{{ html_classes|to_string }}">
+<head prefix="og: http://ogp.me/ns#">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="description" content="{% if contact.seo_description %}{{ contact.seo_description }}{% endif %}">
+	<meta name="keywords" content="{% if contact.seo_keywords %}{{ contact.seo_keywords }}{% endif %}">
+
+	<meta property="og:locale" content="ru_RU">
+	<meta property="og:url" content="{{ site_url }}">
+	<meta property="og:site_name" content="Cool">
+	<meta property="og:type" content="website">
+	<meta property="og:title" content="{{ contact.title }}">
+	<meta property="og:image" content="{{ site_url }}{% get_media_prefix %}logo.jpg">
+	<meta property="og:image:secure_url" content="{{ site_url }}{% get_media_prefix %}logo.jpg">
+	<meta property="og:description" content="{% if contact.seo_description %}{{ contact.seo_description }}{% endif %}">
+
+	<link rel="canonical" href="{{ site_url }}"/>
+	<link rel="shortcut icon" href="{% static 'favicons/favicon-16x16.ico' %}"/>
+	<link rel="icon" type="image/x-icon" href="{% static 'favicons/favicon-16x16.ico' %}">
+	<link rel="icon" type="image/png" href="{% static 'favicons/favicon-48x48.png' %}">
+	<link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicons/apple-touch-icon.png' %}">
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="{% static 'favicons/apple-touch-icon-114x114.png' %}">
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="{% static 'favicons/apple-touch-icon-72x72.png' %}">
+	<link rel="apple-touch-icon-precomposed" sizes="57x57" href="{% static 'favicons/apple-touch-icon-57x57.png' %}">
+
+	<link rel="preload" as="image" href="{% get_media_prefix %}logo.jpg">
+	<link rel="preload" as="image" href="{% get_media_prefix %}map.jpg">
+
+	<link href="{% md5url 'css/vendors.min.css' %}" rel="stylesheet" type="text/css" media="screen"/>
+	<link href="{% md5url 'css/base.min.css' %}" rel="stylesheet" type="text/css" media="screen"/>
+
+
+	<title>{{ contact.title }}</title>
+</head>
+
+<body>
+	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" style="display:none">
+		<symbol id="arrow-icon" fill="currentColor"  viewBox="0 0 16 16">
+			<path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+		</symbol>
+		<symbol id="close-icon" viewBox="0 0 24 24" stroke-linejoin="round" stroke-linecap="round">
+			<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+		</symbol>
+		<symbol id="address-icon" fill="currentColor"  viewBox="0 0 16 16">
+			<path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+		</symbol>
+		<symbol id="phone-icon" fill="currentColor" viewBox="0 0 16 16">
+			<path d="M3 2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V2zm6 11a1 1 0 1 0-2 0 1 1 0 0 0 2 0z"/>
+		</symbol>
+		<symbol id="email-icon" fill="currentColor" viewBox="0 0 16 16">
+			<path d="M8.941.435a2 2 0 0 0-1.882 0l-6 3.2A2 2 0 0 0 0 5.4v.314l6.709 3.932L8 8.928l1.291.718L16 5.714V5.4a2 2 0 0 0-1.059-1.765l-6-3.2ZM16 6.873l-5.693 3.337L16 13.372v-6.5Zm-.059 7.611L8 10.072.059 14.484A2 2 0 0 0 2 16h12a2 2 0 0 0 1.941-1.516ZM0 13.373l5.693-3.163L0 6.873v6.5Z"/>
+		</symbol>
+		<symbol id="telegram-icon" fill="currentColor" viewBox="0 0 16 16">
+			<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.287 5.906c-.778.324-2.334.994-4.666 2.01-.378.15-.577.298-.595.442-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294.26.006.549-.1.868-.32 2.179-1.471 3.304-2.214 3.374-2.23.05-.012.12-.026.166.016.047.041.042.12.037.141-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8.154 8.154 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629.093.06.183.125.27.187.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.426 1.426 0 0 0-.013-.315.337.337 0 0 0-.114-.217.526.526 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09z"/>
+		</symbol>
+		<symbol id="vk-icon" fill="currentColor" viewBox="0 0 112.196 112.196">
+			<circle cx="56.098" cy="56.098" r="56.098"/>
+			<path fill="#FFFFFF" d="M53.979,80.702h4.403c0,0,1.33-0.146,2.009-0.878 c0.625-0.672,0.605-1.934,0.605-1.934s-0.086-5.908,2.656-6.778c2.703-0.857,6.174,5.71,9.853,8.235 c2.782,1.911,4.896,1.492,4.896,1.492l9.837-0.137c0,0,5.146-0.317,2.706-4.363c-0.2-0.331-1.421-2.993-7.314-8.463 c-6.168-5.725-5.342-4.799,2.088-14.702c4.525-6.031,6.334-9.713,5.769-11.29c-0.539-1.502-3.867-1.105-3.867-1.105l-11.076,0.069 c0,0-0.821-0.112-1.43,0.252c-0.595,0.357-0.978,1.189-0.978,1.189s-1.753,4.667-4.091,8.636c-4.932,8.375-6.904,8.817-7.71,8.297 c-1.875-1.212-1.407-4.869-1.407-7.467c0-8.116,1.231-11.5-2.397-12.376c-1.204-0.291-2.09-0.483-5.169-0.514 c-3.952-0.041-7.297,0.012-9.191,0.94c-1.26,0.617-2.232,1.992-1.64,2.071c0.732,0.098,2.39,0.447,3.269,1.644 c1.135,1.544,1.095,5.012,1.095,5.012s0.652,9.554-1.523,10.741c-1.493,0.814-3.541-0.848-7.938-8.446 c-2.253-3.892-3.954-8.194-3.954-8.194s-0.328-0.804-0.913-1.234c-0.71-0.521-1.702-0.687-1.702-0.687l-10.525,0.069 c0,0-1.58,0.044-2.16,0.731c-0.516,0.611-0.041,1.875-0.041,1.875s8.24,19.278,17.57,28.993 C44.264,81.287,53.979,80.702,53.979,80.702L53.979,80.702z"/>
+		</symbol>
+	</svg>
+
+	<div id="site-header">
+		<nav class="navbar">
+			<div class="brand-container container-fluid">
+				<div class="brand-logo">
+					{% if contact.logo %}
+						<img class="img-fluid" src="{% get_media_prefix %}{{contact.logo}}" loading="lazy">
+					{% endif %}
+				</div>
+				<h1 class="brand-title d-none d-md-block">{{ contact.title }}</h1>
+			</div>
+		</nav>
+
+		{% block banner %}{% endblock banner %}
+
+	</div>
+
+	<div class="container mt-5">
+		{% block content %}{% endblock content %}
+	</div>
+
+	<div id="site-footer" class="footer">
+		<div id="copyright" class="text-center mt-3">
+			{% now "Y" as current_year %}
+			<small>{% blocktranslate %}{{ current_year }} © Права принадлежат ИП Шубин{% endblocktranslate %}</small>
+		</div>
+		<div id="back2top" class="disable">
+			<div class="top-link centered flex-column no-select">
+				<svg class="icon arrow-icon arrow-up"><use xlink:href="#arrow-icon"></use></svg>
+				вверх
+			</div>
+		</div>
+	</div>
+
+	<script>
+		(async () => {
+			if ('loading' in HTMLImageElement.prototype) {
+				var observerSupport = true;
+
+				if (!'IntersectionObserver' in window || !'IntersectionObserverEntry' in window || !'intersectionRatio' in window.IntersectionObserverEntry.prototype) {
+					observerSupport = false;
+				}
+				else {
+					var observer = new IntersectionObserver(entries => {
+						entries.forEach(entry => {
+							let ratio = entry.intersectionRatio
+							if (ratio > 0.0) {
+								img = entry.target;
+								if ( img.classList.contains('lazyload') ) {
+									img.classList.add('lazyloaded')
+									img.classList.remove('lazyload')
+								}
+							}
+						})
+					})
+				}
+
+				var images = document.querySelectorAll("img.lazyload");
+				images.forEach(img => {
+					if (observerSupport) {
+						observer.observe(img);
+					} else {
+						img.classList.remove('lazyload');
+					}
+
+					if (img.dataset.src) 	img.src = img.dataset.src;
+					if (img.dataset.srcset) img.srcset = img.dataset.srcset;
+				})
+
+			} else {
+				const lazySizesLib = await import("{% static 'js/lazysizes.min.js' %}");
+				lazySizes.init();
+			}
+		})();
+	</script>
+
+	<script src="{% md5url 'js/vendors.min.js' %}"></script>
+	<script src="{% md5url 'js/base.min.js' %}"></script>
+
+</body>
+</html>

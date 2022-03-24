@@ -1,0 +1,55 @@
+//Control selectors
+
+::selection
+	color: black
+	background-color: transparentize($secondary,0.3)
+
+select
+	outline: 0
+	box-shadow: none
+	background-image: none
+	cursor: pointer
+	/* Remove IE arrow */
+	&::-ms-expand
+		display: none
+
+.no-select
+	user-select: none
+	-webkit-tap-highlight-color: transparentize(black, 1)
+	-webkit-touch-callout: none
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus
+	border: 0 !important
+	//-webkit-text-fill-color: #ссс
+	-webkit-box-shadow: 0 0 0px 1000px transparent inset
+	transition: background-color 5000s ease-in-out 0s
+	//background: $theme-color
+
+
+::-webkit-scrollbar *
+	background: transparent !important
+	//background: rgba(90, 90, 90)
+	width: 0
+
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-track-piece,
+::-webkit-scrollbar-track
+	background: rgba(0, 0, 0, 0.2)
+
+input
+	&::-webkit-input-placeholder
+		font-style: normal
+	&:focus::-webkit-input-placeholder
+		opacity: 0
+
+button
+	border: none

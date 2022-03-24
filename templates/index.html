@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_tags %}
+{% load cache %}
+{% load thumbnail %}
+
+{% block banner %}
+
+	{% if service_list %}
+	<div id="bannerSlider" class="carousel slide carousel-fade d-none d-md-block" data-bs-ride="carousel">
+		<div class="carousel-indicators">
+			{% for obj in service_list %}
+			<button type="button" data-bs-target="#bannerSlider" data-bs-slide-to="{{forloop.counter0}}" {% if forloop.first %}class="active" aria-current="true"{% endif %} aria-label="{{obj.title}}"></button>
+			{% endfor %}
+		</div>
+		<div class="carousel-inner">
+			{% for obj in service_list %}
+			<div class="carousel-item{% if forloop.first %} active{% endif %}" data-bs-interval="7000">
+				{% thumbnail obj.cover "576" as sm %}
+				{% thumbnail obj.cover "768" as md %}
+				{% thumbnail obj.cover "992" as lg %}
+				{% thumbnail obj.cover "1200" as xl %}
+				<img class="lazyload"
+					data-src="{% get_media_prefix %}{{ obj.cover }}"
+					data-srcset="{{ sm.url }} {{ sm.x }}w, {{ md.url }} {{ md.x }}w, {{ lg.url }} {{ lg.x }}w, {{ xl.url }} {{ xl.x }}w, {{ obj.cover.url }} {{ obj.cover.width }}w"
+					data-sizes="auto"
+					data-expand="-50"
+					loading="lazy"
+				>
+				<div class="carousel-caption d-flex m-0" data-id="{{obj.id}}">
+					<h4 class="title">{{obj.title}}</h4>
+				</div>
+				{% endthumbnail %}
+				{% endthumbnail %}
+				{% endthumbnail %}
+				{% endthumbnail %}
+			</div>
+			{% endfor %}
+		</div>
+		<div class="controls-block no-select">
+			{% if service_list|length > 1 %}
+			<button class="carousel-control-prev" type="button" data-bs-target="#bannerSlider" data-bs-slide="prev">
+				<svg class="arrow-icon icon arrow-left"><use xlink:href="#arrow-icon"></use></svg>
+				<span class="visually-hidden">Предыдущий</span>
+			</button>
+			<button class="carousel-control-next" type="button" data-bs-target="#bannerSlider" data-bs-slide="next">
+				<svg class="arrow-icon icon arrow-right"><use xlink:href="#arrow-icon"></use></svg>
+				<span class="visually-hidden">Следующий</span>
+			</button>
+			{% endif %}
+		</div>
+	</div>
+	{% endif %}
+
+{% endblock banner %}
+
+
+{% block content %}
+	{% cache 86400 index_page %}{% endcache %}
+	<section class="service-section">
+
+		<div class="service-header">
+			<h2>{{contact.title}}</h2>
+			<p>{{contact.description}}</p>
+		</div>
+
+		<div class="service-list row row-cols-1 row-cols-md-3 g-5 g-md-2 g-lg-4 mt-2">
+			{% for obj in service_list %}
+			<div id="service-{{obj.id}}" class="service-item col">
+				<div class="card bg-light mb-2 p-sm-3 p-md-0 px-lg-4 mb-lg-4 pt-lg-4 h-100">
+					{% thumbnail obj.cover "576" as sm %}
+					{% thumbnail obj.cover "768" as md %}
+					{% thumbnail obj.cover "992" as lg %}
+					{% thumbnail obj.cover "1200" as xl %}
+					<img class="card-img-top lazyload"
+						src="{{ xs.url }}"
+						data-src="{% get_media_prefix %}{{ obj.cover }}"
+						data-srcset="{{ sm.url }} {{ sm.x }}w, {{ md.url }} {{ md.x }}w, {{ lg.url }} {{ lg.x }}w, {{ xl.url }} {{ xl.x }}w, {{ obj.cover.url }} {{ obj.cover.width }}w"
+						data-sizes="auto"
+						data-expand="-50"
+						loading="lazy"
+						alt="{{obj.title}}"
+					>
+					{% endthumbnail %}
+					{% endthumbnail %}
+					{% endthumbnail %}
+					{% endthumbnail %}
+					<div class="card-body px-0 px-md-2 px-lg-0 py-lg-4">
+						<h4 class="card-title">{{obj.title}}</h4>
+						<p class="card-text">{{obj.description}}</p>
+						<button type="button" class="btn btn-secondary">Перейти к портфолио</button>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+
+		<div id="portfolioContainer" class="portfolio-contanier hidden">
+			{% for obj in service_list %}
+			<div class="portfolio-tab">
+				<h2 class="tab-title mb-4">{{obj.title}}</h2>
+				<div class="tab-portfolio-list">
+					{% for portfolio in obj.portfolio.all %}
+						<div id="portfolio-{{portfolio.id}}" class="portfolio-item row g-2 g-md-4">
+						{% for img in portfolio.images.all %}
+							{% widthratio img.file.height img.file.width 100 as height_ratio %}
+
+							{% if img.general %}
+							<div class="primary col-12 col-md-8 {% if height_ratio|add:"0" < 75 %}landscape{% else %}portrait{% endif %}">
+								{% if forloop.first and portfolio.title %}
+								<div class="portfolio-meta mb-2 mb-md-4">
+									<h4 class="title mb-0">{{portfolio.title}}</h4>
+									<p class="excerpt mb-0">{{portfolio.excerpt}}</p>
+								</div>
+								{% endif %}
+							{% endif %}
+
+								<a class="image-wrapper{% if not img.general %} col-auto my-2 my-md-4{% endif %}"
+								href="#modalContainer"
+								data-bs-toggle="modal"
+								data-index="{{forloop.counter0}}"
+								data-parent="{{portfolio.id}}"
+								data-title="{{img.title}}"
+								data-description="{{img.description}}"
+								>
+									{% thumbnail img.file "320" as xs %}
+									{% thumbnail img.file "576" as sm %}
+									{% thumbnail img.file "992" as md %}
+									{% thumbnail img.file "1200" as xl %}
+									<img id="image-{{forloop.counter0}}" class="lazyload"
+										src="{{ xs.url }}"
+										data-src="{% get_media_prefix %}{{ img.file }}"
+										data-srcset="{{ xs.url }} {{ xs.x }}w, {{ sm.url }} {{ sm.x }}w, {{ md.url }} {{ md.x }}w, {{ xl.url }} {{ xl.x }}w"
+										data-sizes="auto"
+										data-expand="50"
+										max-width="{{img.file.width}}"
+										max-height="{{img.file.height}}"
+										loading="lazy"
+										title="{% if img.title %}{{ img.title }}{% endif %}"
+										alt="{% if img.excerpt %}{{ img.excerpt }}. {% endif %}Создано: {{ portfolio.created }}"
+										style="max-width: {{img.file.width}}px"
+									>
+									{% empty %}
+									<img src="{% get_media_prefix %}no-image.png">
+									{% endthumbnail %}
+									{% endthumbnail %}
+									{% endthumbnail %}
+									{% endthumbnail %}
+								</a>
+
+							{% if img.general %}
+							</div>
+							{% endif %}
+
+							{% if forloop.first and portfolio.images.count > 1 %}<div class="secondary row col-auto col-md-4 flex-nowrap flex-md-wrap mt-2 mt-md-0 g-2 g-md-4">{% endif %}
+							{% if forloop.last and portfolio.images.count > 1 %}</div>{% endif %}
+						{% endfor %}
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</section>
+
+
+	<section class="contact-section">
+		<h2>Наши контакты</h2>
+
+		<div class="row">
+			<div class="left-cell col-12 col-md-6">
+				<div class="contact-name my-3">{{contact.name}}</div>
+				{% for name, label, value, link, field_type in contact %}
+				<div class="{{field_type}}-{{name}} my-2 me-2">
+					{% if link %}<a class="link {{field_type}}-link" href="{{ link }}" target="_blank">{% endif %}
+					<svg class="link-secondary icon {{name}}-icon me-1"><use xlink:href="#{{name}}-icon"></use></svg>
+
+					{% if field_type == 'contact' %}{{value}}{% else %}{{label}}{% endif %}
+					{% if link %}</a>{% endif %}
+				</div>
+				{% endfor %}
+			</div>
+			<div class="right-cell col-auto col-md-6 mt-3 mt-md-0">
+				{% if contact.map_url %}
+				<a href="{{contact.map_url}}" target="_blank" title="{{contact.address}}">
+				{% endif %}
+
+				<img class="map-thumb" src="{% get_media_prefix %}{{ contact.map_thumb }}" loading="lazy" alt="{{contact.address}}">
+
+				{% if contact.map_url %}
+				</a>
+				{% endif %}
+			</div>
+
+		</div>
+	</section>
+
+	<div id="modalContainer" class="modal fade" data-bs-backdrop="true" tabindex="-1" aria-hidden="true">
+		<div class="modal-close centered no-select" data-bs-dismiss="modal" aria-label="Закрыть">Закрыть <svg class="close-icon icon"><use xlink:href="#close-icon"></use></svg></div>
+		<div class="modal-dialog">
+			<div id="portfolioSlider" class="carousel slide" data-bs-interval="false">
+				<div class="carousel-inner">
+				</div>
+
+				<div class="controls-block no-select">
+					<button class="carousel-control-prev" type="button" data-bs-target="#portfolioSlider" data-bs-slide="prev">
+						<svg class="arrow-icon icon arrow-left"><use xlink:href="#arrow-icon"></use></svg>
+						<span class="visually-hidden">Предыдущее фото</span>
+					</button>
+					<button class="carousel-control-next" type="button" data-bs-target="#portfolioSlider" data-bs-slide="next">
+						<svg class="arrow-icon icon arrow-right"><use xlink:href="#arrow-icon"></use></svg>
+						<span class="visually-hidden">Следующее фото</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock content %}
+

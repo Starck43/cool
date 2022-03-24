@@ -1,0 +1,45 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+
+
+# production
+/build
+
+# development
+resources/
+media/*
+static/*
+src/img/
+
+# Django #
+__pycache__/
+*.log
+*.pot
+*.pyc
+migrations/
+
+# Database #
+*.sqlite3
+
+# Sublime #
+*.sublime-workspace
+*.sublime-project
+sftp-config.json
+package-lock.json
+datadamp.json
+
+# npm
+.sublime-gulp.cache
+
+# Environment
+.env
+prod.env
+.venv
+venv/
+
+# misc
+.DS_Store
+.idea
+
