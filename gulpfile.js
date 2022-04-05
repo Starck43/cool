@@ -40,6 +40,7 @@ function styles() { // таск 'styles' обработает все файлы 
 	.pipe(combineCSS()) //Объединяем медиа запросы
 	.pipe(postcss([ cssImport ])) // Импортируем стили, прописанные через команду @import в начале файла
 	.pipe(sourcemaps.write()) //пропишем sourcemap
+	.pipe(cleanCSS({level:1})) // Сжимаем CSS файл
 	.pipe(rename({suffix: '.min'})) // Добавляем суффикс .min
 	.pipe(gulp.dest(path.static+'css')) // Выгружаем результат в папку static::/css
 	.pipe(browserSync.stream()) // Обновляем CSS на странице при изменении
@@ -52,7 +53,7 @@ function scripts() {
 //	.pipe(sourcemaps.init()) // Инициализируем sourcemap
 	.pipe(rigger()) //подключаем импортирование скриптов
 //	.pipe(concat('custom.min.js')) // Объединяем в один файл
-//	.pipe(uglify()) // Сжимаем JS файл
+	.pipe(uglify()) // Сжимаем JS файл
 	.pipe(rename({suffix: '.min'})) // Добавляем суффикс .min
 //	.pipe(sourcemaps.write()) // Пропишем карты
 	.pipe(gulp.dest(path.static+'js')) // Выгружаем в папку dest::/js

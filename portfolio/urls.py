@@ -5,7 +5,5 @@ app_name = 'portfolio'
 
 urlpatterns = [
 	path('', views.index, name='index'),
-	#path('portfolio/',views.portfolio_list.as_view(), kwargs={'slug': None}, name='portfolio-list-url'),
-	#path('portfolio/<slug>/',views.portfolio_list.as_view(), name='portfolio-list-url'),
-	#path('portfolio/<slug>/',views.portfolio_detail.as_view(), name='portfolio-detail-url'),
+	path('reset_cache', views.reset_cache, name='reset-cache'),
 ]

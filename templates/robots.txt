@@ -3,13 +3,13 @@ Disallow: /site.wsgi
 Disallow: /admin
 Disallow: /account
 Disallow: /accounts
+Disallow: /reset_cache
 Disallow: */None
 Disallow: */?
 Disallow: /search/?q=
 
 Allow: /media
 Disallow: /media/cache
-Disallow: /assets
-Disallow: /static
+Disallow: /static/admin
 
-Sitemap: http://cool/sitemap.xml
+#Sitemap: http://cool/sitemap.xml

@@ -1,8 +1,4 @@
 
-$navbar-h-xs: 50px
-$navbar-h-sm: 75px
-$navbar-h-xl: 100px
-
 @import "../../node_modules/bootstrap/scss/functions"
 @import "../../node_modules/bootstrap/scss/variables"
 @import "../../node_modules/bootstrap/scss/mixins"
@@ -11,6 +7,10 @@ $navbar-h-xl: 100px
 @import mixins
 @import fonts
 @import reset
+
+$navbar-h-xs: 50px
+$navbar-h-sm: 60px
+$navbar-h-xl: 80px
 
 //@import "../../node_modules/bootstrap/scss/root"
 //@import "../../node_modules/bootstrap/scss/bootstrap"
@@ -72,6 +72,8 @@ img[data-sizes="auto"]
 
 #site-header
 	height: auto
+	.brand-logo img
+		width: auto
 	+media-breakpoint-up(md)
 		height: 100vh
 
@@ -88,16 +90,15 @@ section
 			margin-bottom: 2rem
 
 
-.navbar
-	.brand-container
-		height: $navbar-h-xs
-		justify-content: center
-		+media-breakpoint-up(sm)
-			height: $navbar-h-sm
-		+media-breakpoint-up(md)
-			justify-content: space-between
-		+media-breakpoint-up(xl)
-			height: $navbar-h-xl
+.navbar .brand-container
+	height: $navbar-h-xs
+	justify-content: center
+	+media-breakpoint-up(sm)
+		height: $navbar-h-sm
+	+media-breakpoint-up(md)
+		justify-content: space-between
+	+media-breakpoint-up(xl)
+		height: $navbar-h-xl
 
 .brand-title
 	font-size: 1.2rem
@@ -158,8 +159,6 @@ section
 				.card-body
 					padding-left: 0.75rem !important
 					padding-right: 0.75rem  !important
-			button
-				border: 1px solid $primary
 
 		.card-body
 			display: flex
@@ -171,11 +170,6 @@ section
 				width: 100%
 				margin-top: auto
 				padding: 0.5rem
-				&:hover
-					border: 1px solid $primary
-				+media-breakpoint-up(sm)
-					width: auto
-
 
 		+media-breakpoint-between(md, lg)
 			.card-title
@@ -185,6 +179,10 @@ section
 .portfolio-contanier
 	position: relative
 	margin-top: 8vh
+	h4
+		font-size: calc(1.1rem + .4vw)
+		letter-spacing: 2px
+
 	.portfolio-tab
 		display: none
 		opacity: 0
@@ -206,6 +204,7 @@ section
 			&:nth-child(odd)
 				.portfolio-meta
 					background-color: $highlight-block-1
+					background: linear-gradient(90deg, $highlight-block-1 0%, lighten($highlight-block-1, 10%) 30%, lighten($highlight-block-1, 30%) 50%, #fff 100%)
 				.primary img
 					object-position: left
 
@@ -216,12 +215,18 @@ section
 				.portfolio-meta
 					text-align: right
 					background-color: $highlight-block-2
+					background: linear-gradient(90deg, #fff 0%, lighten($highlight-block-2, 10%) 50%, lighten($highlight-block-2, 5%) 70%, $highlight-block-2 100%)
 				.primary img
 					float: right
 					object-position: right
 
 				+media-breakpoint-up(md)
 					flex-direction: row-reverse
+
+			+media-breakpoint-down(md)
+				.row.col-auto
+					margin: 0
+					padding: 0
 
 			.image-wrapper
 				position: relative
@@ -233,7 +238,7 @@ section
 					max-height: 85vh
 					transition: all 300ms ease
 					&:hover
-						transform: scale(1.05)
+						transform: translateY(1rem)
 
 
 			.primary
@@ -256,7 +261,7 @@ section
 
 			.portfolio-meta
 				width: 100%
-				padding: 1.5vh 3vh
+				padding: 3vh
 				.title
 					font-weight: bold
 				.excerpt
@@ -264,6 +269,12 @@ section
 				//border: solid 3px $secondary
 
 .contact-section
+	.brand-logo
+		height: auto
+		width: inherit
+		img
+			max-width: 200px
+
 	.contact-name
 		color: $primary
 		font-weight: bold
@@ -285,12 +296,13 @@ section
 		right: 1rem
 		padding: 0 5px
 		color: #fff
-		opacity: 0.7
 		//border: 1px solid white
 		//border-radius: 3rem
 		mix-blend-mode: difference
 		transition: opacity 150ms linear
-		z-index: 1000
+		z-index: 10000
+		+media-breakpoint-up(lg)
+			opacity: 0.7
 		svg
 			width: 1.5rem
 			height: 1.5rem
@@ -349,7 +361,7 @@ section
 	transition: 500ms transform ease-in-out
 	opacity: 1
 	mix-blend-mode: multiply
-	z-index: 10000
+	z-index: 1000
 	.top-link
 		font-size: 0.8rem
 		color: $link-color
@@ -360,8 +372,8 @@ section
 		opacity: 0
 		z-index: -1
 	.icon
-		width: 1.6rem
-		height: 1.6rem
+		width: 1.8rem
+		height: 1.8rem
 		color: $secondary
 
 

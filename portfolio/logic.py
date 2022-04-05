@@ -65,10 +65,14 @@ class MediaFileStorage(FileSystemStorage):
 		if self.output_name:
 			name = self.output_name
 		else:
-			filename, ext = path.splitext(name)
-			name = slugify(filename)+ext
+			upload_folder, filename = path.split(name)
+			if upload_folder:
+				upload_folder += '/'
+			#print(upload_folder, filename)
+			filename, ext = path.splitext(filename)
+			name = upload_folder+slugify(filename)+ext
 
-		if path.exists(self.path(name)):
+		if path.exists(self.path(name)): # если такой файл есть на диске, то удалим его
 			remove(self.path(name))
 
 		return name
@@ -85,7 +89,7 @@ def PortfolioUploadTo(instance, filename):
 def get_image_html(obj):
 	if obj and path.isfile(path.join(settings.MEDIA_ROOT,obj.name)):
 		size = '%sx%s' % (settings.ADMIN_THUMBNAIL_SIZE[0], settings.ADMIN_THUMBNAIL_SIZE[1])
-		thumb = get_thumbnail(obj.name, size, crop='center', quality=settings.ADMIN_THUMBNAIL_QUALITY)
+		thumb = get_thumbnail(obj.name, size, quality=settings.ADMIN_THUMBNAIL_QUALITY)
 		return format_html('<img src="{0}" width="50"/>', thumb.url)
 	else:
 		return format_html('<img src="/media/no-image.png" width="50"/>')
@@ -98,6 +102,14 @@ def limit_file_size(file):
 	if path.exists(file.path) and file.size > limit:
 		raise ValidationError('Размер файла превышает лимит %s Мб. Рекомендуемый размер фото 1500x1024 пикс.' % (limit/(1024*1024)))
 
+
+""" Clear cache function """
+def clear_cache(key='default'):   # `default` is a key from CACHES dict in settings.py
+	from django.core.cache import cache
+	cache_page = cache
+	if cache_page:
+		cache_page.clear()
+	return cache_page
 
 
 """ Return True if the request comes from a mobile device """

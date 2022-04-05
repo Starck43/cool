@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load custom_tags %}
-{% load cache %}
 {% load thumbnail %}
 
 {% block banner %}
@@ -27,9 +26,12 @@
 					data-expand="-50"
 					loading="lazy"
 				>
+
+				{% if obj.portfolio.count > 0 %}
 				<div class="carousel-caption d-flex m-0" data-id="{{obj.id}}">
 					<h4 class="title">{{obj.title}}</h4>
 				</div>
+				{% endif %}
 				{% endthumbnail %}
 				{% endthumbnail %}
 				{% endthumbnail %}
@@ -56,7 +58,6 @@
 
 
 {% block content %}
-	{% cache 86400 index_page %}{% endcache %}
 	<section class="service-section">
 
 		<div class="service-header">
@@ -64,10 +65,10 @@
 			<p>{{contact.description}}</p>
 		</div>
 
-		<div class="service-list row row-cols-1 row-cols-md-3 g-5 g-md-2 g-lg-4 mt-2">
+		<div class="service-list row row-cols-1 row-cols-md-3 g-md-2 g-lg-4 mt-2">
 			{% for obj in service_list %}
-			<div id="service-{{obj.id}}" class="service-item col">
-				<div class="card bg-light mb-2 p-sm-3 p-md-0 px-lg-4 mb-lg-4 pt-lg-4 h-100">
+			<div id="service-{{obj.id}}" class="service-item col my-3 my-lg-4">
+				<div class="card bg-light p-sm-3 p-md-0 px-lg-4 pt-lg-4 h-100">
 					{% thumbnail obj.cover "576" as sm %}
 					{% thumbnail obj.cover "768" as md %}
 					{% thumbnail obj.cover "992" as lg %}
@@ -85,6 +86,7 @@
 					{% endthumbnail %}
 					{% endthumbnail %}
 					{% endthumbnail %}
+
 					<div class="card-body px-0 px-md-2 px-lg-0 py-lg-4">
 						<h4 class="card-title">{{obj.title}}</h4>
 						<p class="card-text">{{obj.description}}</p>
@@ -98,21 +100,21 @@
 		<div id="portfolioContainer" class="portfolio-contanier hidden">
 			{% for obj in service_list %}
 			<div class="portfolio-tab">
-				<h2 class="tab-title mb-4">{{obj.title}}</h2>
+				<h2 class="tab-title mb-5">{{obj.title}}</h2>
 				<div class="tab-portfolio-list">
 					{% for portfolio in obj.portfolio.all %}
 						<div id="portfolio-{{portfolio.id}}" class="portfolio-item row g-2 g-md-4">
+						{% if portfolio.title %}
+							<div class="portfolio-meta mb-2 mb-md-4">
+								<h4 class="title mb-0">{{portfolio.title}}</h4>
+								<p class="excerpt mb-0">{{portfolio.excerpt}}</p>
+							</div>
+						{% endif %}
 						{% for img in portfolio.images.all %}
 							{% widthratio img.file.height img.file.width 100 as height_ratio %}
 
-							{% if img.general %}
-							<div class="primary col-12 col-md-8 {% if height_ratio|add:"0" < 75 %}landscape{% else %}portrait{% endif %}">
-								{% if forloop.first and portfolio.title %}
-								<div class="portfolio-meta mb-2 mb-md-4">
-									<h4 class="title mb-0">{{portfolio.title}}</h4>
-									<p class="excerpt mb-0">{{portfolio.excerpt}}</p>
-								</div>
-								{% endif %}
+							{% if img.general or portfolio.images.count == 1 %}
+							<div class="primary col-auto col-md-8 {% if height_ratio|add:"0" < 75 %}landscape{% else %}portrait{% endif %}">
 							{% endif %}
 
 								<a class="image-wrapper{% if not img.general %} col-auto my-2 my-md-4{% endif %}"
@@ -148,7 +150,7 @@
 									{% endthumbnail %}
 								</a>
 
-							{% if img.general %}
+							{% if img.general or portfolio.images.count == 1 %}
 							</div>
 							{% endif %}
 
@@ -156,6 +158,8 @@
 							{% if forloop.last and portfolio.images.count > 1 %}</div>{% endif %}
 						{% endfor %}
 						</div>
+					{% empty %}
+						<i>Пусто!</i>
 					{% endfor %}
 				</div>
 			</div>
@@ -179,6 +183,11 @@
 					{% if link %}</a>{% endif %}
 				</div>
 				{% endfor %}
+				<div class="brand-logo my-3">
+					{% if contact.logo %}
+						<img src="{% get_media_prefix %}{{contact.logo}}" loading="lazy">
+					{% endif %}
+				</div>
 			</div>
 			<div class="right-cell col-auto col-md-6 mt-3 mt-md-0">
 				{% if contact.map_url %}

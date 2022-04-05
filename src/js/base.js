@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			var title = target.dataset.title
 			var descr = target.dataset.description
 			if (title || descr) {
-				var meta = `<div class="caption"><h4>${title}</h4><p>${descr}</p></div>`
+				var meta = `<div class="caption"><h5>${title}</h5><p>${descr}</p></div>`
 				node.insertAdjacentHTML('beforeend', meta)
 			}
 			sliderContainer.append(node)
@@ -87,11 +87,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	scrollUp && scrollUp.addEventListener('click', function (e) {
 		e.preventDefault()
-		if (!portfolioContainer || portfolioContainer.classList.contains('hidden')) {
-			bannerLinks[0].scrollIntoView({behavior: "smooth", block: "end"})
-		} else {
-			serviceItems[0].scrollIntoView({behavior: "smooth"})
-		}
+		serviceItems[0].scrollIntoView({behavior: "smooth"})
 
 	})
 

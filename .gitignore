@@ -12,6 +12,7 @@ resources/
 media/*
 static/*
 src/img/
+doc/*
 
 # Django #
 __pycache__/

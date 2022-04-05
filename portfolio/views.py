@@ -1,26 +1,30 @@
 from os import path
 
 from django.conf import settings
-from django.shortcuts import render #, redirect, HttpResponseRedirect
-
-#from django.urls import reverse_lazy
-#from django.dispatch import receiver
-
-#from django.db.models import Q, OuterRef, Subquery, Prefetch, Max, Count, Avg
-#from django.db.models.expressions import F, Value
-#from django.db.models.functions import Coalesce
-
-#from django.utils.timezone import now
-#from django.utils.decorators import method_decorator
+from django.http import HttpResponse
+from django.shortcuts import render
 
 from django.views.generic.list import ListView
-#from django.views.generic.detail import DetailView
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_page
 
 #from django import forms
 from .models import Contact, Service, Portfolio, Image
+from .logic import clear_cache
+
+
+
+""" Drop off site cache """
+@login_required
+def reset_cache(request):
+	clear_cache()
+	return HttpResponse(f'<h1>Кэш страницы сброшен!</h1><br/><a href="/"><< Назад</a>')
+
+
 
 
 """ Main page """
+@cache_page(6*30*24*60*60)
 def index(request):
 	contact = Contact.objects.all()[0]
 	service = Service.objects.all()
@@ -36,13 +40,3 @@ def index(request):
 
 	return render(request, 'index.html', context)
 
-
-""" Portfolio ListView """
-class portfolio_list(ListView):
-	model = Portfolio
-	template_name = 'portfolio/portfolio_list.html'
-
-	def get_context_data(self, **kwargs):
-		context = super().get_context_data(**kwargs)
-		context['html_classes'] = ['portfolio-list',]
-		return context

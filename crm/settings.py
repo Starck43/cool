@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-import os, sys
+from os import path
+
 # django-environ
 # https://django-environ.readthedocs.io/en/latest/
 import environ
@@ -19,19 +20,21 @@ import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
+env = environ.Env()
+env.read_env(path.join(BASE_DIR, '.env'))
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ai^c4(v0ua^^!qz=86(+!eivsp#amrz1cp)-z#9teyem_$gnka'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DEBUG', False)
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = env('ALLOWED_HOSTS', list, [])
 
-INTERNAL_IPS = ['localhost',]
+INTERNAL_IPS = ALLOWED_HOSTS
 
 # Application definition
 
@@ -50,7 +53,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    #'django.middleware.cache.CacheMiddleware',
     #'django.middleware.cache.UpdateCacheMiddleware',
 
     'django.middleware.security.SecurityMiddleware',
@@ -60,17 +62,21 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 
-    #'django.middleware.cache.FetchFromCacheMiddleware',
+   # 'django.middleware.cache.FetchFromCacheMiddleware',
     #'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+
+# CACHE_MIDDLEWARE_SECONDS = 60*5
+# CACHE_MIDDLEWARE_KEY_PREFIX = ''
+# CACHE_MIDDLEWARE_ALIAS = 'default'
 
 ROOT_URLCONF = 'crm.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ os.path.join(BASE_DIR, 'templates') ],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -89,13 +95,17 @@ WSGI_APPLICATION = 'crm.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': env.db()
 }
 
+
+CACHES = {
+    'default': env.cache()
+}
+
+print(CACHES['default']['LOCATION'])
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -154,20 +164,20 @@ PUBLIC_ROOT = ''
 STATIC_URL = '/static/'
 
 if not DEBUG:
-    STATIC_ROOT = os.path.join(BASE_DIR, PUBLIC_ROOT + 'static/')
+    STATIC_ROOT = path.join(BASE_DIR, PUBLIC_ROOT + 'static/')
     STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, PUBLIC_ROOT + 'assets/'),
+        path.join(BASE_DIR, PUBLIC_ROOT + 'assets/'),
     ]
 else:
     #STATIC_ROOT = ''
     STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, PUBLIC_ROOT + 'static/'),
+        path.join(BASE_DIR, PUBLIC_ROOT + 'static/'),
     ]
 
 # Base url to serve media files
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, PUBLIC_ROOT + 'media/')
+MEDIA_ROOT = path.join(BASE_DIR, PUBLIC_ROOT + 'media/')
 
 FILES_UPLOAD_FOLDER = 'uploads/'
 

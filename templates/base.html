@@ -9,6 +9,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="yandex-verification" content="c6da62a624bb2bf0" />
+	<meta name="title" content="{% if contact.seo_title %}{{ contact.seo_title }}{% endif %}">
 	<meta name="description" content="{% if contact.seo_description %}{{ contact.seo_description }}{% endif %}">
 	<meta name="keywords" content="{% if contact.seo_keywords %}{{ contact.seo_keywords }}{% endif %}">
 
@@ -22,13 +24,18 @@
 	<meta property="og:description" content="{% if contact.seo_description %}{{ contact.seo_description }}{% endif %}">
 
 	<link rel="canonical" href="{{ site_url }}"/>
-	<link rel="shortcut icon" href="{% static 'favicons/favicon-16x16.ico' %}"/>
-	<link rel="icon" type="image/x-icon" href="{% static 'favicons/favicon-16x16.ico' %}">
-	<link rel="icon" type="image/png" href="{% static 'favicons/favicon-48x48.png' %}">
-	<link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicons/apple-touch-icon.png' %}">
-	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="{% static 'favicons/apple-touch-icon-114x114.png' %}">
-	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="{% static 'favicons/apple-touch-icon-72x72.png' %}">
-	<link rel="apple-touch-icon-precomposed" sizes="57x57" href="{% static 'favicons/apple-touch-icon-57x57.png' %}">
+	<link rel="shortcut icon" type="image/x-icon" href="{% static 'favicons/favicon.ico' %}"/>
+	<link rel="icon" type="image/x-icon" href="{% static 'favicons/favicon.ico' %}">
+	<link rel="icon" type="image/png" href="{% static 'favicons/favicon-16x16.png' %}">
+	<link rel="icon" type="image/png" href="{% static 'favicons/favicon-32x32.png' %}">
+	<link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicons/apple-touch-icon-180x180.png' %}">
+	<link rel="apple-touch-icon" sizes="152x152" href="{% static 'favicons/apple-touch-icon-152x152.png' %}">
+	<link rel="apple-touch-icon" sizes="76x76" href="{% static 'favicons/apple-touch-icon-76x76.png' %}">
+	<link rel="manifest" href="{% static 'favicons/site.webmanifest' %}">
+	<link rel="mask-icon" href="{% static 'favicons/safari-pinned-tab.svg' %}" color="#fd1">
+	<meta name="msapplication-TileColor" content="#ffdd11">
+	<meta name="msapplication-config" content="{% static 'favicons/browserconfig.xml' %}">
+	<meta name="theme-color" content="#aaaaaa">
 
 	<link rel="preload" as="image" href="{% get_media_prefix %}logo.jpg">
 	<link rel="preload" as="image" href="{% get_media_prefix %}map.jpg">
@@ -71,7 +78,7 @@
 			<div class="brand-container container-fluid">
 				<div class="brand-logo">
 					{% if contact.logo %}
-						<img class="img-fluid" src="{% get_media_prefix %}{{contact.logo}}" loading="lazy">
+						<img src="{% get_media_prefix %}{{contact.logo}}" loading="lazy">
 					{% endif %}
 				</div>
 				<h1 class="brand-title d-none d-md-block">{{ contact.title }}</h1>
@@ -82,7 +89,7 @@
 
 	</div>
 
-	<div class="container mt-5">
+	<div class="container mt-md-5">
 		{% block content %}{% endblock content %}
 	</div>
 

@@ -32,7 +32,17 @@ class Service(models.Model):
 		verbose_name = 'Услуга'
 		verbose_name_plural = 'Услуги'
 
+
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.uploaded_file = self.cover
+
+
 	def save(self, *args, **kwargs):
+		# если файл заменен, то требуется удалить оригинал и все его миниатюры в кэше у sorl-thumbnails
+		if self.uploaded_file and self.uploaded_file != self.cover:
+			delete(self.uploaded_file)
+
 		if self.title and not self.seo_title:
 			self.seo_title = self.title
 
@@ -55,25 +65,23 @@ class Portfolio(models.Model):
 	created = models.DateField('Дата создания', blank=True, default=date.today, help_text='Укажите для себя дату создания портфолио, чтобы знать что заменить со временем')
 
 	class Meta:
-		ordering = ['-created', 'slug']
+		ordering = ['-created', '-id', 'title']
 		verbose_name = 'Портфолио'
 		verbose_name_plural = 'Портфолио'
 
 
 	def save(self, *args, **kwargs):
-		if not self.slug:
-			if not self.title:
-				if self.pk:
-					last_id = self.pk
-				else:
-					last_id = Portfolio.objects.latest('id').id
-					if last_id:
-						last_id += 1
-					else:
-						last_id = 1
-				self.slug = f'portfolio-{last_id}'
+		if not self.pk:
+			last_id = Portfolio.objects.latest('id').id
+			if last_id:
+				last_id += 1
 			else:
-				self.slug = uuslug(self.title.lower(), instance=self)
+				last_id = 1
+			self.slug = f'portfolio-{last_id}'
+		else:
+			if not self.slug:
+				self.slug = f'portfolio-{self.pk}'
+
 		super().save(*args, **kwargs)
 
 
@@ -111,8 +119,21 @@ class Image(models.Model):
 	filename.short_description = 'Имя файла'
 
 
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.uploaded_file = self.file
+
+
+	def save(self, *args, **kwargs):
+		# если файл заменен, то требуется удалить все миниатюры в кэше у sorl-thumbnails
+		if self.uploaded_file and self.uploaded_file != self.file:
+			delete(self.uploaded_file)
+
+		super().save(*args, **kwargs)
+
+
 	def delete(self, *args, **kwargs):
-		# физически удалим файл с диска, если он единственный
+		# физически удалим файл с его миниатюрами в кэше у sorl-thumbnails
 		delete(self.file)
 		folder = path.join(settings.MEDIA_ROOT, path.dirname(self.file.name))
 		if not listdir(folder): # если пустая папка, то удалим и ее
