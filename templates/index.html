@@ -15,11 +15,13 @@
 		<div class="carousel-inner">
 			{% for obj in service_list %}
 			<div class="carousel-item{% if forloop.first %} active{% endif %}" data-bs-interval="7000">
+				{% thumbnail obj.cover "320" as xs %}
 				{% thumbnail obj.cover "576" as sm %}
 				{% thumbnail obj.cover "768" as md %}
 				{% thumbnail obj.cover "992" as lg %}
 				{% thumbnail obj.cover "1200" as xl %}
 				<img class="lazyload"
+					src="{{ xs.url }}"
 					data-src="{% get_media_prefix %}{{ obj.cover }}"
 					data-srcset="{{ sm.url }} {{ sm.x }}w, {{ md.url }} {{ md.x }}w, {{ lg.url }} {{ lg.x }}w, {{ xl.url }} {{ xl.x }}w, {{ obj.cover.url }} {{ obj.cover.width }}w"
 					data-sizes="auto"
@@ -32,6 +34,7 @@
 					<h4 class="title">{{obj.title}}</h4>
 				</div>
 				{% endif %}
+				{% endthumbnail %}
 				{% endthumbnail %}
 				{% endthumbnail %}
 				{% endthumbnail %}
@@ -69,6 +72,7 @@
 			{% for obj in service_list %}
 			<div id="service-{{obj.id}}" class="service-item col my-3 my-lg-4">
 				<div class="card bg-light p-sm-3 p-md-0 px-lg-4 pt-lg-4 h-100">
+					{% thumbnail obj.cover "320" as xs %}
 					{% thumbnail obj.cover "576" as sm %}
 					{% thumbnail obj.cover "768" as md %}
 					{% thumbnail obj.cover "992" as lg %}
@@ -76,12 +80,13 @@
 					<img class="card-img-top lazyload"
 						src="{{ xs.url }}"
 						data-src="{% get_media_prefix %}{{ obj.cover }}"
-						data-srcset="{{ sm.url }} {{ sm.x }}w, {{ md.url }} {{ md.x }}w, {{ lg.url }} {{ lg.x }}w, {{ xl.url }} {{ xl.x }}w, {{ obj.cover.url }} {{ obj.cover.width }}w"
+						data-srcset="{{ xs.url }} {{ xs.x }}w, {{ sm.url }} {{ sm.x }}w, {{ md.url }} {{ md.x }}w, {{ lg.url }} {{ lg.x }}w, {{ xl.url }} {{ xl.x }}w, {{ obj.cover.url }} {{ obj.cover.width }}w"
 						data-sizes="auto"
 						data-expand="-50"
 						loading="lazy"
 						alt="{{obj.title}}"
 					>
+					{% endthumbnail %}
 					{% endthumbnail %}
 					{% endthumbnail %}
 					{% endthumbnail %}

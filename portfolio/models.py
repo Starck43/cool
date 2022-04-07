@@ -65,7 +65,7 @@ class Portfolio(models.Model):
 	created = models.DateField('Дата создания', blank=True, default=date.today, help_text='Укажите для себя дату создания портфолио, чтобы знать что заменить со временем')
 
 	class Meta:
-		ordering = ['-created', '-id', 'title']
+		ordering = ['-created']
 		verbose_name = 'Портфолио'
 		verbose_name_plural = 'Портфолио'
 

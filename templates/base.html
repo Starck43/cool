@@ -117,13 +117,14 @@
 				else {
 					var observer = new IntersectionObserver(entries => {
 						entries.forEach(entry => {
-							let ratio = entry.intersectionRatio
-							if (ratio > 0.0) {
-								img = entry.target;
-								if ( img.classList.contains('lazyload') ) {
-									img.classList.add('lazyloaded')
-									img.classList.remove('lazyload')
-								}
+							if (entry.isIntersecting) {
+								let img = entry.target;
+								if (img.dataset.srcset) img.srcset = img.dataset.srcset;
+								if (img.dataset.src) 	img.src = img.dataset.src;
+								img.classList.add('lazyloaded');
+								img.classList.remove('lazyload');
+
+								observer.unobserve(img);
 							}
 						})
 					})
@@ -131,14 +132,11 @@
 
 				var images = document.querySelectorAll("img.lazyload");
 				images.forEach(img => {
-					if (observerSupport) {
-						observer.observe(img);
-					} else {
+					if (!observerSupport) {
 						img.classList.remove('lazyload');
+					} else {
+						observer.observe(img);
 					}
-
-					if (img.dataset.src) 	img.src = img.dataset.src;
-					if (img.dataset.srcset) img.srcset = img.dataset.srcset;
 				})
 
 			} else {

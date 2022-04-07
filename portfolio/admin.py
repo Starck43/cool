@@ -38,6 +38,8 @@ class ImageAdmin(AdminImageMixin, admin.ModelAdmin):
 class PortfolioAdmin(admin.ModelAdmin):
 	list_display = ('thumb', '__str__', 'service', 'created',)
 	list_display_links = ('thumb', '__str__',)
+	search_fields = ('title',)
+	list_filter = ('service',)
 	inlines = [ImagesInline]
 
 	list_per_page = 30
