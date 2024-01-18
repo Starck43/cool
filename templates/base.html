@@ -96,7 +96,10 @@
 	<div id="site-footer" class="footer">
 		<div id="copyright" class="text-center mt-3">
 			{% now "Y" as current_year %}
-			<small>{% blocktranslate %}{{ current_year }} © Права принадлежат ИП Шубин{% endblocktranslate %}</small>
+			<small>
+				<p>{% blocktranslate %}{{ current_year }} © Права принадлежат ИП Шубин А.В. {% endblocktranslate %}</p>
+				<span>Разработчик сайта <a href="http://istarck.ru" target="_blank">iStarck</a></span>
+			</small>
 		</div>
 		<div id="back2top" class="disable">
 			<div class="top-link centered flex-column no-select">

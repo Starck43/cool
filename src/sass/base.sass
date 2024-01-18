@@ -149,8 +149,11 @@ section
 
 	.service-item
 		.card
-			border-color: transparent
-			transition: all 200ms linear
+			border: solid 3px transparent
+			transition: all 150ms linear
+			box-sizing: content-box
+			&:hover
+				border-color: $secondary
 
 		&.active .card
 			background-color: #fff !important
