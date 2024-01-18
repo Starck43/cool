@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	const modalContainer = document.getElementById('modalContainer')
 	const sliderContainer = modalContainer.querySelector('.carousel-inner')
+	const sliderControls = modalContainer.querySelector('.controls-block')
 
 	//var modal = new bootstrap.Modal(modalContainer)
 	modalContainer.addEventListener('show.bs.modal', function (event) {
@@ -49,17 +50,20 @@ document.addEventListener("DOMContentLoaded", function() {
 			if (list.indexOf(el) == Number(target.dataset.index)) {
 				node.classList.add('active')
 			}
-			var img = el.querySelector('img')
+			let img = el.querySelector('img')
 			img.classList = 'centered'
+			img.setAttribute('loading', 'auto')
 			node.appendChild(img.cloneNode(true))
-			var title = target.dataset.title
-			var descr = target.dataset.description
+			let title = target.dataset.title
+			let descr = target.dataset.description
 			if (title || descr) {
-				var meta = `<div class="caption"><h5>${title}</h5><p>${descr}</p></div>`
+				let meta = `<div class="caption"><h5>${title}</h5><p>${descr}</p></div>`
 				node.insertAdjacentHTML('beforeend', meta)
 			}
 			sliderContainer.append(node)
 		})
+		// скроем стрелки, если фото одна в слайдере
+		sliderControls.style.display = (list.length == 1) ? 'none': 'block'
 	})
 
 	modalContainer.addEventListener('hidden.bs.modal', function (event) {
