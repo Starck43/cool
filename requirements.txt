@@ -1,8 +1,8 @@
-Django==4.2.15
+Django
 django-ckeditor==6.6.1
 django-debug-toolbar
 django-environ
 django-js-asset
 django-uuslug
-pillow==10.3.0
+Pillow
 python-slugify

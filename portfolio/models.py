@@ -12,7 +12,7 @@ from django.db import models
 from sorl.thumbnail import delete
 from uuslug import uuslug
 
-from .logic import MediaFileStorage, PortfolioUploadTo, get_image_html, limit_file_size
+from .logic import MediaFileStorage, portfolio_upload_to, get_image_html, limit_file_size
 
 
 
@@ -94,7 +94,7 @@ class Image(models.Model):
 	portfolio = models.ForeignKey(Portfolio, on_delete=models.SET_NULL, null=True, related_name='images', verbose_name = 'Портфолио')
 	title = models.CharField('Заголовок', max_length=100, blank=True)
 	excerpt = models.TextField('Описание', blank=True, help_text='Описание фото доступно только в просмотрщике')
-	file = models.ImageField('Файл', upload_to=PortfolioUploadTo, storage=MediaFileStorage(), validators=[limit_file_size], help_text='Размер файла не более %s Мб' % round(settings.FILE_UPLOAD_MAX_MEMORY_SIZE/1024/1024))
+	file = models.ImageField('Файл', upload_to=portfolio_upload_to, storage=MediaFileStorage(), validators=[limit_file_size], help_text='Размер файла не более %s Мб' % round(settings.FILE_UPLOAD_MAX_MEMORY_SIZE / 1024 / 1024))
 	general = models.BooleanField('Главное фото', default=False, help_text='Главное фото крупным планом в портфолио')
 
 	# Metadata
